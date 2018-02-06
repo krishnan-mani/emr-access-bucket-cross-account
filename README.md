@@ -1,4 +1,4 @@
-Cross-account S3 bucket access from EMR instances using a bucket policy
+ Illustrates access to S3 bucket owned by a different account from instances in an EMR cluster 
 
 HOW-TO
 ===
