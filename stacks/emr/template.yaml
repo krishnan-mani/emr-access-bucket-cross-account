@@ -1,0 +1,52 @@
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+  InstanceProfileName:
+    Type: String
+    Default: cross-account-bucket-access
+
+Resources:
+  emrDefaultRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - elasticmapreduce.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole
+      Path: '/'
+
+  cluster:
+    Type: AWS::EMR::Cluster
+    Properties:
+      Instances:
+        MasterInstanceGroup:
+          InstanceCount: 1
+          InstanceType: m4.large
+          Market: ON_DEMAND
+          Name: Master
+        CoreInstanceGroup:
+          InstanceCount: 2
+          InstanceType: m4.large
+          Market: ON_DEMAND
+          Name: Core
+        Ec2KeyName: !Ref 'KeyName'
+        Ec2SubnetId: !Ref 'SubnetId'
+      JobFlowRole: !Ref 'InstanceProfileName'
+      Name: TestBucketAccessCluster
+      ServiceRole: !Ref 'emrDefaultRole'
+      ReleaseLabel: emr-5.11.1
+      Tags:
+        -
+          Key: Name
+          Value: test-bucket-access-cluster
+      VisibleToAllUsers: true
