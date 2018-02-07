@@ -3,6 +3,7 @@
 HOW-TO
 ===
 
+- We assume that the bucket is created and owned on account X and the EMR cluster is provisioned in account Y
 - The process of creating the bucket policy and IAM roles is illustrated using AWS CLI actions
 - *NOTE*: Replace the values of ```<ACCOUNT-X>``` and ```<BUCKET-NAME>``` in respective policy document examples before use
 - Create the bucket policy on the bucket in account X 
